@@ -12,7 +12,7 @@ app.use(morgan('dev'));
 app.set('views', path.join(__dirname, 'views'));
 
 //static images
-app.use(express.static(`${__dirname}/static/images`));
+app.use(express.static(`${__dirname}/static/`));
 
 //create an array of the images
 const imageFolder = path.join(__dirname, 'static', 'images');
@@ -42,6 +42,14 @@ app.get('/gallery', async (req, res) => {
     res.status(200).render('gallery', {
         images: images
     });
+});
+
+app.get('/upload', (req, res) => {
+    res.status(200).render('upload');
+});
+
+app.post('/upload', (req, res) => {
+    console.log('image upload');
 });
 
 //create an asyn function 

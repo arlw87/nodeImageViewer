@@ -23,12 +23,9 @@
     <div>
         <h1 class="text-center display-4 headlineText">Upload Image</h1>
         <hr>
-        
-        <form>
-            <div class="form-group">
-            <label for="exampleFormControlFile1">Upload New Image</label>
-            <input type="file" class="form-control-file" id="exampleFormControlFile1">
-            </div>
+        <form method="post" encType="multipart/form-data" action='http://localhost:4000/upload'>
+           <input name="imageToUpload" type="file"></input>
+           <input type="submit"></input>
         </form>
     </div>
 

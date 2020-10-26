@@ -1,0 +1,29 @@
+{
+  "name": "nodeimageviewer",
+  "version": "1.0.0",
+  "description": "Photoframe image viewer",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arlw87/nodeImageViewer.git"
+  },
+  "keywords": [
+    "javascript",
+    "node",
+    "photoframe"
+  ],
+  "author": "Andrew White",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arlw87/nodeImageViewer/issues"
+  },
+  "homepage": "https://github.com/arlw87/nodeImageViewer#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  }
+}

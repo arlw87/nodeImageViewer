@@ -12,7 +12,7 @@ block content
     .container.pt-2
       .row.justify-content-center
         .col.border.col-md-12.col-11.bg-white.shadow-sm.mt-3
-          form(method="post" encType="multipart/form-data" action='http://localhost:4000/upload')
+          form(method="post" encType="multipart/form-data" action='/upload')
             div.row.custom-file.mx-auto.my-2
               input.custom-file-input#customFile(name="imageToUpload" type="file")
               label.custom-file-label(for="customFile") Choose File (.jpg or .jpeg only)

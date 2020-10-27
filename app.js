@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const fileupload = require('express-fileupload');
 const imageThumbnail = require('image-thumbnail');
+var parser = require('exif-parser');
 
 let options = { percentage: 75};
 
@@ -23,14 +24,12 @@ app.use(express.static(`${__dirname}/static/`));
 const imageFolder = path.join(__dirname, 'static', 'images');
 const imageThumbnailFolder = path.join(__dirname, 'static', 'images-thumbnails');
 const images = fs.readdirSync(imageFolder);
+const thumbs = fs.readdirSync(imageThumbnailFolder);
 
 const writeThumbnail = async (image, imageFolderPath, imageThumbnailFolderPath) => {
     const thumbnail = await imageThumbnail(path.join(imageFolderPath, image), options);
     console.log(image);
-    fs.writeFile(path.join(imageThumbnailFolderPath, `thnl-${image}`), thumbnail, err => {
-        console.log("finished thumbnail Write");
-        console.log(err)
-    });
+    await fs.writeFileSync(path.join(imageThumbnailFolderPath, `thnl-${image}`), thumbnail);
 }
 
 //create thumbnails when server starts upload
@@ -39,7 +38,11 @@ const writeThumbnail = async (image, imageFolderPath, imageThumbnailFolderPath) 
 //being generated so its possible that the gallery page will initially look bare
 (async () => {
     for (const image of images){
-        writeThumbnail(image, imageFolder, imageThumbnailFolder);
+        if (!thumbs.includes(`thnl-${image}`)){
+            writeThumbnail(image, imageFolder, imageThumbnailFolder);
+        } else {
+            console.log(`${image} exists in thumbs`);
+        }
     }
 })();
 
@@ -74,9 +77,40 @@ app.get('/gallery', async (req, res) => {
     });
 });
 
+app.get('/settings', (req, res) => {
+    res.status(200).render('settings');
+});
+
 app.get('/gallery/:imageDetail', (req, res) => {
-    const imageDetail = req.params
-    res.end("Finished");
+    const imageDetail = req.params.imageDetail
+    const imageName = imageDetail.substring(5, imageDetail.length)
+
+    console.log(path.join(imageFolder, imageName));
+    //test out the image detail parser
+    fs.readFile(path.join(imageFolder, imageName), (err, file) => {
+        console.log(file);
+        var p1 = parser.create(file);
+        var results = p1.parse();
+        console.log(results);
+        console.log(results.tags.Make);
+        var exifData = {
+            make: results.tags.Make,
+            model: results.tags.Model,
+            imageSize: results.tags.imageSize,
+            date: results.tags.ModifyDate, 
+            exposureTime: results.tags.ExposureTime,
+            iso: results.tags.ISO,
+            fNumber: results.tags.FNumber,
+            name:imageDetail
+        }
+
+        res.status(200).render('imageDetail', { 
+            imageName: imageName,
+            data: exifData
+        });
+
+    });
+
 });
 
 app.get('/upload', (req, res) => {
@@ -104,11 +138,30 @@ app.post('/upload', (req, res) => {
     });   
 
     uploadResponse(res, 200, "Upload was Successful", "Upload another?");
-     
-    // res.status('200').render('uploadFinish', { 
-    //     status: "Upload Successful"
-    // });
+});
 
+app.post('/delete/:imageToDelete', (req, res) => {
+    const imageToDelete = req.params.imageToDelete;
+    console.log(imageToDelete);
+
+    //delete the image
+    fs.unlink(path.join(imageFolder, imageToDelete), (err) => {
+        if (err){
+            console.log(err);
+        } else {
+            console.log(`${imageToDelete} was deleted`)
+        }
+    });
+    //delete the thumbnail
+    fs.unlink(path.join(imageThumbnailFolder, `thnl-${imageToDelete}`), (err) => {
+        if (err){
+            console.log(err);
+        } else {
+            console.log(`${imageToDelete} thumbnail was deleted`)
+        }
+    });
+
+    res.status(200).render('delete');
 });
 
 const uploadResponse = (res, status, result, linkText) => {

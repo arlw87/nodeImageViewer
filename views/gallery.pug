@@ -8,6 +8,7 @@ block content
       div.gallery#gallery
         each image in images
           div.mb-3.pics.animation.all
-            img.img-fluid(src=`\\images-thumbnails\\${image}` alt="Card image cap")
+            a(href=`\\gallery\\${image}`)
+              img.img-fluid(src=`\\images-thumbnails\\${image}` alt="Card image cap")
  
 

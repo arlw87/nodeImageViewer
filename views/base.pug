@@ -1,5 +1,46 @@
-h1 This is a template
+doctype html
+html
+    header
+        title Photoframe Interface
+        <!-- Required meta tags -->
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
 
-h2= author
-h3= message
+        <!-- Bootstrap CSS -->
+        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous")
 
+        link(href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet")
+
+        <!-- My CSS -->
+        link(rel="stylesheet" href="\\style\\style.css")
+
+        <!-- Font awesome -->
+        link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous")
+   
+        script(scr="\\script\\script.js" crossorigin="anonymous")
+   
+    body.bg-light
+        //HEADER
+        include __nav
+                    
+        //Content
+        block content
+            h1 Place Holder
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous")
+        script(src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous")
+        script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous")
+
+        script.
+            $(".custom-file-input").on("change", function() {
+                var fileNameShort;
+                var fileName = $(this).val().split("\\").pop();
+                if (fileName.length > 22){
+                     fileNameShort = fileName.substring(0,20) + "...";
+                } else {
+                    fileNameShort = fileName;
+                }
+                $(this).siblings(".custom-file-label").addClass("selected").html(fileNameShort);
+            });

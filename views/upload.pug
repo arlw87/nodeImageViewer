@@ -1,41 +1,35 @@
-<!doctype html>
-<html lang="en">
-  <head>
 
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+extends base
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+block content 
+  
+  div.pt-3
+    h1.text-center.display-4#headLineText Upload Image
+    .container
+      .row.justify-content-center
+        hr.col-10.col-sm-11.col-lg-12
+        span.col-10.col-sm-11.col-lg-12.text-center.mt-2 Please upload a jpg image file only. Other image files are not supported
+    .container.pt-2
+      .row.justify-content-center
+        .col.border.col-md-12.col-11.bg-white.shadow-sm.mt-3
+          form(method="post" encType="multipart/form-data" action='http://localhost:4000/upload')
+            div.row.custom-file.mx-auto.my-2
+              input.custom-file-input#customFile(name="imageToUpload" type="file")
+              label.custom-file-label(for="customFile") Choose File (.jpg or .jpeg only)
+            div.row.m-2
+              input.btn.btn-secondary.mx-auto(type="submit")
 
-    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="\style\style.css">
 
-    <!-- Font awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
-    <title>Upload Image</title>
+      //- .div.row.justify-content-center.col.col-xl-12
+      //-   form.border(method="post" encType="multipart/form-data" action='http://localhost:4000/upload')
+      //-     div.row
+      //-       input.custom-file-input#customFile(name="imageToUpload" type="file")
+      //-       label.custom-file-label(for="customFile") Choose File
+      //-     div.row
+      //-       input.btn.btn-secondary.mx-auto(type="submit")
 
-  </head>
-  <body>  
-    <div>
-        <h1 class="text-center display-4 headlineText">Upload Image</h1>
-        <hr>
-        <form method="post" encType="multipart/form-data" action='http://localhost:4000/upload'>
-           <input name="imageToUpload" type="file"></input>
-           <input type="submit"></input>
-        </form>
-    </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script>
 
-    </script>
-  </body>
-</html>
+

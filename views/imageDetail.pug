@@ -25,7 +25,7 @@ block content
                 .col-md-4
                     span=`F-Number: ${data.fNumber}`
         
-        form(method="post" encType="multipart/form-data" action=`/delete/${imageName}`)
+        form(method="post" encType="multipart/form-data" action=`/gallery/delete/${imageName}`)
             div.row.m-2
               input.btn.btn-danger.mx-auto(type="submit" value="Delete")
 

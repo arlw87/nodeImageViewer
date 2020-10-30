@@ -3,6 +3,7 @@ const galleryRouter = require('./routes/galleryRoute');
 const uploadRouter = require('./routes/uploadRoute');
 const homeRouter = require('./routes/homeRoute');
 const settingsRouter = require('./routes/settingsRoute');
+const liveRouter = require('./routes/liveRoute.js');
 
 const express = require('express');
 const app = express();
@@ -49,13 +50,11 @@ const thumbs = fs.readdirSync(imageThumbnailFolder);
 
 //routing
 
-
-
-
 //Mounting the routers
 app.use('/gallery', galleryRouter);
 app.use('/upload', uploadRouter);
 app.use('/', homeRouter);
 app.use('/settings', settingsRouter);
+app.use('/live', liveRouter);
 
 module.exports = app;

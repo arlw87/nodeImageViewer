@@ -2,19 +2,84 @@ doctype html
 html(lang='en')
     head 
         title Live View
-    body
-        h1 This is the live view
-        h2 The time is #{time}
-        img(src=`\\images-thumbnails\\${image}` height=300 width=300)
 
-    script.
-        var name = 'Andrew';
-        setTimeout(() => {
-            //- const Http = new XMLHttpRequest();
-            //- const url = '/live';
-            //- Http.open("GET", url);
-            //- Http.send();
-            window.location.reload(true); 
+        <!-- Required meta tags -->
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
 
-        }, 5000);
         
+    body
+        div#bg
+
+        script.
+
+            const setBackgroundImage = ( imageName ) => {
+                const imageLoca = `/images/${imageName}`;
+                document.getElementById("bg").style.backgroundImage = "url('"+imageLoca+"')";
+            };
+
+            var firstImage = `!{image}`;
+            setBackgroundImage(firstImage);
+
+            var timeInterval = 10000;
+            //div.text-center.align-middle.h-100.d-inline-block
+            const f1 = () => {
+                const Http = new XMLHttpRequest();
+                //this callback fires anytime there is a readyState change
+                //which is not just when the fetch is complete
+                //https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+                Http.onreadystatechange = function() {
+                    if (Http.readyState == 4){
+                        //if response back is successful then
+                        //process the response
+                        if (Http.status == 200){
+                            var ResponseArray = JSON.parse(this.responseText);
+                            timeInterval = ResponseArray.data.timeInterval;
+                            updateImage(ResponseArray);
+                        }
+
+                        //if readyState is 4 then the fetch is complete
+                        //and the data transfer is either successful or not 
+                        //in either case you want to start the next timer
+                        console.log(timeInterval);
+                        setTimeout(f1, timeInterval); 
+                    }
+                }
+                const url = '/live/update';
+                Http.open("GET", url);
+                Http.send();
+            }
+
+            const updateImage = (responseArray) => {
+                const image = responseArray.data.imagePath;
+                setBackgroundImage(image);
+            }
+
+            setTimeout(f1, timeInterval);
+
+
+
+        style(type='text/css').
+            body, html{
+                height: 100%;
+                background-color: black;
+                margin: 0;
+            }
+            #bg{
+                /* The image used */
+                background-image: url("/images/one.jpg");
+
+                /* Full height */
+                height: 100%;
+                width: 100%;
+
+                /* Center and scale the image nicely */
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
+
+
+
+
+

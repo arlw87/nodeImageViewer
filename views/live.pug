@@ -21,9 +21,10 @@ html(lang='en')
             var firstImage = `!{image}`;
             setBackgroundImage(firstImage);
 
-            var timeInterval = 10000;
+            var timeInterval = !{timeInterval};
             //div.text-center.align-middle.h-100.d-inline-block
             const f1 = () => {
+                console.log(Date.now().toString());
                 const Http = new XMLHttpRequest();
                 //this callback fires anytime there is a readyState change
                 //which is not just when the fetch is complete

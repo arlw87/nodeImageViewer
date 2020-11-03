@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 var parser = require('exif-parser');
+var commonFunctions = require('./../commonFunctions');
 
 //FILE PATHS
 const imageFolder = path.join(__dirname, '..', 'static', 'images');
@@ -73,6 +74,9 @@ exports.deleteImage = (req, res) => {
             console.log(`${imageToDelete} thumbnail was deleted`)
         }
     });
+
+    //delete it from the current running list
+    commonFunctions.deleteImageFromList(imageToDelete);
 
     res.status(200).render('delete');
 };

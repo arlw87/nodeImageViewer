@@ -7,66 +7,72 @@ var sizeOf = require('image-size');
 const imageFolder = commonFunctions.getImageFolderPath();
 const imageThumbnailFolder = commonFunctions.getThumbnailImageFolderPath();
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//instead of refreshing the page you could use a ajax call 
-// to get the time interval and to sent the image
-// i think this would be neater.
-
 exports.liveView = (req, res) => {
     var now = new Date();
     console.log('Live Request');
     console.log(imageFolder);
 
+    //get the latest settings 
+    const settings = readCurrentSettingSYNC();
+    const timeInterval = settings.interval * 1000;
+
     //read in the images files and then render the page
-    fs.readdir(imageFolder, (err, files) => {
-        console.log(files.length);
-        var oneFile = files[random(files.length)];
-        console.log(random(files.length));
-        // var dimensions = sizeOf(path.join(imageFolder, oneFile));
-        // console.log(dimensions.width, dimensions.height);
-        res.status(200).render('live', {
-            image: oneFile
-        });
+    // fs.readdir(imageFolder, (err, files) => {
+    //     console.log(files.length);
+    //     var oneFile = files[random(files.length)];
+    //     console.log(random(files.length));
+    //     // var dimensions = sizeOf(path.join(imageFolder, oneFile));
+    //     // console.log(dimensions.width, dimensions.height);
+    //     res.status(200).render('live', {
+    //         image: oneFile,
+    //         timeInterval: timeInterval
+    //     });
+    // });
+
+    const oneFile = commonFunctions.getNextImage();
+    res.status(200).render('live', {
+        image: oneFile,
+        timeInterval: timeInterval
     });
 };
 
-const random = (size) => {
 
-    return Math.floor(Math.random() * size);
-
-};
 
 exports.update = (req, res) => {
     console.log("Live update");
+
+    //get the latest settings 
+    const settings = readCurrentSettingSYNC();
+    const timeInterval = settings.interval * 1000;
+
     //respond with json data
     //read in the images files and then render the page
-    fs.readdir(imageFolder, (err, files) => {
-        console.log(files.length);
-        var oneFile = files[random(files.length)];
-        console.log(random(files.length));
-        res.status(200).json({ 
-            status: 'success',
-            data: {
-                timeInterval: 20000,
-                imagePath: oneFile
-            }    
-        });
-    });  
+    // fs.readdir(imageFolder, (err, files) => {
+    //     console.log(files.length);
+    //     var oneFile = files[random(files.length)];
+    //     console.log(random(files.length));
+    //     res.status(200).json({ 
+    //         status: 'success',
+    //         data: {
+    //             timeInterval: timeInterval,
+    //             imagePath: oneFile
+    //         }    
+    //     });
+    // });  
+
+    const oneFile = commonFunctions.getNextImage();
+    res.status(200).json({ 
+        status: 'success',
+        data: {
+            timeInterval: timeInterval,
+            imagePath: oneFile
+        }    
+    });
 };
 
 
-// exports.updateImage = (req, res) => {
+const readCurrentSettingSYNC = () => {
+    const settingsFile = fs.readFileSync(commonFunctions.getSettingsLocation(), 'utf8');
+    return JSON.parse(settingsFile);
+};
 
-//     console.log("Updating image");
-//     var options = { 
-//         root: commonFunctions.getImageFolderPath(), 
-//         headers: {
-//             'x-timestamp': Date.now(), 
-//             'x-sent': true, 
-//             'content-type': 'image/jpeg'
-//         }
-//     }
-
-//     var imageFiles = commonFunctions.get
-
-// }

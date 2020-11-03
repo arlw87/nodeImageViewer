@@ -47,7 +47,6 @@ const thumbs = fs.readdirSync(imageThumbnailFolder);
     }
 })();
 
-
 //routing
 
 //Mounting the routers

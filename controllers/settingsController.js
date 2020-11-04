@@ -16,9 +16,10 @@ exports.saveSettings = (req, res) => {
     const order = req.body.photoOrder;
     console.log(order);
     console.log(`interval is ${interval}`);
+
+    const currentSettings = commonFunctions.readCurrentSettingSYNC();
     if (interval === undefined || order === undefined) {
         //error read in the setting data again 
-        const currentSettings = readCurrentSettingSYNC();
         //output an error page
         res.status(200).render('settings', { 
             saveStatus: "Error",
@@ -31,6 +32,17 @@ exports.saveSettings = (req, res) => {
     //convert to number
     var intervalNumber = interval * 1;
     const savedObject = saveSettingsSYNC(intervalNumber, order);
+    console.log(savedObject);
+
+    //has the photo order been updated
+    //current Settings read from settings file Vs settings from webpage
+    if (currentSettings.photoOrder !== order){
+        console.log(`Photo order has changed from ${currentSettings.photoOrder} to ${order}`);
+        //set the photo order of the photoframe from the settings in the file
+        commonFunctions.setPhotoOrder();
+        //generate a new list as the order has changed
+        commonFunctions.generateNewPhotoList();
+    }
     
     res.status(200).render('settings', { 
         saveStatus: "True",

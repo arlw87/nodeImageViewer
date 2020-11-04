@@ -47,6 +47,10 @@ const thumbs = fs.readdirSync(imageThumbnailFolder);
     }
 })();
 
+//generate the photolist
+commonFunctions.setPhotoOrder();
+commonFunctions.generateNewPhotoList();
+
 //routing
 
 //Mounting the routers

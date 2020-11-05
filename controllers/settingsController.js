@@ -1,11 +1,12 @@
 const fs = require('fs');
+const shell = require('shelljs');
 const commonFunctions = require('./../commonFunctions');
 
 exports.renderSettings = (req, res) => {
     const currentSettings = commonFunctions.readCurrentSettingSYNC();
     console.log(currentSettings);
     res.status(200).render('settings', { 
-        saveStatus: "False",
+        status: "False",
         currentInterval: `${currentSettings.interval}`,
         currentOrder: `${currentSettings.photoOrder}`
     });
@@ -22,7 +23,7 @@ exports.saveSettings = (req, res) => {
         //error read in the setting data again 
         //output an error page
         res.status(200).render('settings', { 
-            saveStatus: "Error",
+            status: "Error",
             currentInterval: `${currentSettings.interval}`,
             currentOrder: `${currentSettings.photoOrder}`
         })
@@ -45,10 +46,22 @@ exports.saveSettings = (req, res) => {
     }
     
     res.status(200).render('settings', { 
-        saveStatus: "True",
+        status: "True",
         currentInterval: `${savedObject.interval}`,
         currentOrder: `${savedObject.photoOrder}`
     });
 
 };
+
+exports.reboot = (req, res) => {
+    const currentSettings = commonFunctions.readCurrentSettingSYNC();
+    console.log(currentSettings);
+    res.status(200).render('settings', { 
+        status: "Rebooting.....",
+        currentInterval: `${currentSettings.interval}`,
+        currentOrder: `${currentSettings.photoOrder}`
+    });
+    shell.exec("sudo reboot now");
+    shell.echo("Rebooting.....");    
+}
 

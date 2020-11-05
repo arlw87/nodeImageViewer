@@ -15,7 +15,17 @@ html(lang='en')
 
             const setBackgroundImage = ( imageName ) => {
                 const imageLoca = `${imageName}`;
-                document.getElementById("bg").style.backgroundImage = "url('"+imageLoca+"')";
+                //when the image has loaded it will be available 
+                //locally so will can be loaded in the background quickly
+                //the image loading should therefore appear smooth
+                console.log(imageLoca);
+                document.getElementById("bg").style.backgroundImage = "none";
+                var tmp = new Image();
+                tmp.onload = () => {
+                    document.getElementById("bg").style.backgroundImage = "url('"+imageLoca+"')";
+                }
+                tmp.src = imageLoca;
+                
             };
 
             var firstImage = `!{image}`;

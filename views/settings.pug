@@ -35,19 +35,23 @@ block content
                       option(value="UploadOrder") In Order of Upload
                 div.row.mt-4.mb-2
                   input.btn.btn-secondary.mx-auto(type="submit" value="Save Settings")
+              form(method="post" encType="application/x-www-form-urlencoded" action='/settings/reboot')
+                div.row.justify-content-center.my-2
+                div.row.mt-4.mb-2
+                  input.btn.btn-danger.mx-auto(type="submit" value="Reboot PhotoFrame")
         br        
         h2.text-center.display-5#status Save Complete
 
   script.
-    var isSaveComplete = "!{saveStatus}";
+    var status = "!{status}";
     const statusText = document.getElementById("status");
-    if (isSaveComplete === "True"){
+    if (status === "True"){
       statusText.style.display = "block";
       statusText.style.color = "green";
       setTimeout(() => {
         statusText.style.display = "none";
       }, 5000);
-    } else if (isSaveComplete === "Error"){
+    } else if (status === "Error"){
         //Flash error message
         statusText.innerHTML = "Error settings undefined or blank";
         let flash = true;
@@ -62,6 +66,11 @@ block content
             flash = true;
           }
       }, 1000);
+    } else if (status === "reboot") {
+      //display rebooting message
+      statusText.style.display = "block";
+      statusText.style.color = "yellow";
+      statusText.innerHTML = "Rebooting....."
     } else {
       statusText.style.display = "none";
     } 

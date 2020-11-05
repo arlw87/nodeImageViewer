@@ -10,8 +10,13 @@ const app = express();
 const morgan = require('morgan');
 const path = require('path');
 const fs = require('fs');
+var shell = require('shelljs');
 
 const commonFunctions = require('./commonFunctions');
+
+//shell test 
+shell.echo("Hello from shelljs");
+
 
 //pug
 app.set('view engine', 'pug');

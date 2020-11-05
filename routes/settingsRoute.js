@@ -7,5 +7,6 @@ router.use(express.urlencoded({
 }));
 
 router.route('/').get(controller.renderSettings).post(controller.saveSettings);
+router.route('/reboot').post(controller.reboot);
 
 module.exports = router;

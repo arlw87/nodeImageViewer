@@ -1,6 +1,6 @@
 //IMPORTS
 const express = require('express');
-const controller = require('../controllers/UploadController');
+const controller = require('../controllers/uploadController');
 const fileupload = require('express-fileupload');
 
 

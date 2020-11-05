@@ -21,10 +21,17 @@ exports.getThumbnailImageFolderPath = () => {
 //for writing thumbnails
 let options = { percentage: 75};
 
+//create thumbnails from the main images
 exports.writeThumbnail = async (image, imageFolderPath, imageThumbnailFolderPath) => {
-    const thumbnail = await imageThumbnail(path.join(imageFolderPath, image), options);
-    console.log(image);
-    await fs.writeFileSync(path.join(imageThumbnailFolderPath, `thnl-${image}`), thumbnail);
+    try{
+        const thumbnail = await imageThumbnail(path.join(imageFolderPath, image), options);
+        console.log(image);
+        await fs.writeFileSync(path.join(imageThumbnailFolderPath, `thnl-${image}`), thumbnail);
+    } catch (err){
+        console.log("Error when writing a thumbnail");
+        console.log(err);
+    }
+
 }
 
 exports.getSettingsLocation = () => {
@@ -33,7 +40,6 @@ exports.getSettingsLocation = () => {
 
 
 exports.generateRandomPhotoOrder = () => {
-    console.log("GENERATE NEW RANDOM ORDER");
     //get list of files in an array
     const files = fs.readdirSync(this.getImageFolderPath());
     //create a new array
@@ -44,34 +50,37 @@ exports.generateRandomPhotoOrder = () => {
         randomOrder.push(files[index]);
         files.splice(index,1);
     }
-    //console.log(`Random Order, length ${randomOrder.length}`);
-    console.log(randomOrder);
     return randomOrder;
 }
 
-// let photoPointer;
-// var photoOrderList;
-
 exports.getNextImage = () => {
+    //for debugging purposes
+    console.log("Photo order @ getNextImage");
+    console.log(photoOrderList);
+    console.log("Pointer Value");
+    console.log(photoPointer);
+
+
     //if no images in folder return a placeholder image
     if (photoOrderList.length === 0){
         return `/placeholder/no_imges.jpg`;
     }
-
+    //if the image pointer is at the end of the photoList 
+    //then generate a new photoList and reset the pointer
     if (photoPointer >= photoOrderList.length){
         console.log("regenerate list");
         photoOrderList = this.generatePhotoOrder();
         photoPointer = 0;
     } 
+    //select new photo
     const photo = photoOrderList[photoPointer];
     photoPointer ++;
-
-    console.log(`pointer is ${photoPointer}, image is /${locationOfImages}/${photo}`);
-
+    //return photo locationq
     return `/${locationOfImages}/${photo}`;
 }
 
 exports.deleteImageFromList = ( imageName ) => {
+    //if image exist in list then delete
     if (photoOrderList.includes(imageName)) {
         //find item
         let pos = photoOrderList.indexOf(imageName);
@@ -80,6 +89,7 @@ exports.deleteImageFromList = ( imageName ) => {
     }
 }
 
+//Insert new image into the photolist
 exports.insertNewImage = ( imageName ) => {
     if (this.getPhotoOrder === "random"){
         //new image to display straight away
@@ -99,19 +109,37 @@ exports.insertNewImage = ( imageName ) => {
 }
 
 exports.generateNewPhotoList = () => {
-    console.log("GENERATE NEW PHOTO LIST");
-    console.log("=======================");
     photoPointer = 0;
     photoOrderList = this.generatePhotoOrder();
-    console.log("==================");
-    console.log("Generate PhotoList");
-    console.log(photoOrderList);
-    console.log("==================");
 }
 
 exports.readCurrentSettingSYNC = () => {
-    const settingsFile = fs.readFileSync(this.getSettingsLocation(), 'utf8');
+    let settingsFile;
+    try{
+        settingsFile = fs.readFileSync(this.getSettingsLocation(), 'utf8');
+    } catch {
+        //if no settings create a default object and turn to a JSON
+        const settingsFileObj = {
+            interval : 30,
+            photoOrder :"random"
+        }
+        settingsFile = JSON.stringify(settingsFileObj);
+        //save a default version to the file system
+        this.saveSettingsSYNC(settingsFileObj.interval, settingsFileObj.photoOrder);
+    }
     return JSON.parse(settingsFile);
+};
+
+exports.saveSettingsSYNC = (interval, photoOrder) => {
+    //construct a JSON object
+    //Save the JSON object to a file
+    const settings = {
+        interval: interval,
+        photoOrder: photoOrder
+    };
+    const settingsJSON = JSON.stringify(settings);
+    fs.writeFileSync(this.getSettingsLocation(), settingsJSON, 'utf8');
+    return settings;
 };
 
 
@@ -126,8 +154,6 @@ exports.getTimeInterval = () => {
 }
 
 exports.generatePhotoListUploadOrder = () => {
-    console.log("GENERATE PHOTO UPLOAD ORDER LIST");
-    console.log("================================");
     const imageDir = this.getImageFolderPath();
     let files = fs.readdirSync(imageDir);
     
@@ -160,10 +186,8 @@ exports.setPhotoOrder = () => {
     console.log(`Photo order is ${photoOrder}`);
 }
 
+//generate a new photo list 
 exports.generatePhotoOrder = () => {
-    console.log("GENERATE PHOTO ORDER");
-    console.log("=======================");
-    console.log(`photoOrder is ${photoOrder}`);
     if (photoOrder === "random"){ 
         //return a random list
         return this.generateRandomPhotoOrder();

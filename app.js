@@ -40,15 +40,23 @@ const thumbs = fs.readdirSync(imageThumbnailFolder);
     for (const image of images){
         if (!thumbs.includes(`thnl-${image}`)){
             console.log("writing thumbnail....");
-            commonFunctions.writeThumbnail(image, imageFolder, imageThumbnailFolder);
+            try{
+                await commonFunctions.writeThumbnail(image, imageFolder, imageThumbnailFolder);
+                console.log("next thumbnail"); 
+            } catch (err) {
+                console.log("Error in App.js");
+                console.log(err);
+            }
+
         } else {
             console.log(`${image} exists in thumbs`);
         }
     }
 })();
 
-//generate the photolist
+//read settings and set the photo order
 commonFunctions.setPhotoOrder();
+//generate the photolist
 commonFunctions.generateNewPhotoList();
 
 //routing

@@ -2,7 +2,7 @@ const fs = require('fs');
 const commonFunctions = require('./../commonFunctions');
 
 exports.renderSettings = (req, res) => {
-    const currentSettings = readCurrentSettingSYNC();
+    const currentSettings = commonFunctions.readCurrentSettingSYNC();
     console.log(currentSettings);
     res.status(200).render('settings', { 
         saveStatus: "False",
@@ -31,7 +31,7 @@ exports.saveSettings = (req, res) => {
 
     //convert to number
     var intervalNumber = interval * 1;
-    const savedObject = saveSettingsSYNC(intervalNumber, order);
+    const savedObject = commonFunctions.saveSettingsSYNC(intervalNumber, order);
     console.log(savedObject);
 
     //has the photo order been updated
@@ -52,19 +52,3 @@ exports.saveSettings = (req, res) => {
 
 };
 
-const saveSettingsSYNC = (interval, photoOrder) => {
-    //construct a JSON object
-    //Save the JSON object to a file
-    const settings = {
-        interval: interval,
-        photoOrder: photoOrder
-    };
-    const settingsJSON = JSON.stringify(settings);
-    fs.writeFileSync(commonFunctions.getSettingsLocation(), settingsJSON, 'utf8');
-    return settings;
-};
-
-const readCurrentSettingSYNC = () => {
-    const settingsFile = fs.readFileSync(commonFunctions.getSettingsLocation(), 'utf8');
-    return JSON.parse(settingsFile);
-};

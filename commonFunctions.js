@@ -121,7 +121,9 @@ exports.readCurrentSettingSYNC = () => {
         //if no settings create a default object and turn to a JSON
         const settingsFileObj = {
             interval : 30,
-            photoOrder :"random"
+            photoOrder :"random",
+            shutdownOption: "disabled",
+            shutdownTime: ""
         }
         settingsFile = JSON.stringify(settingsFileObj);
         //save a default version to the file system
@@ -130,12 +132,14 @@ exports.readCurrentSettingSYNC = () => {
     return JSON.parse(settingsFile);
 };
 
-exports.saveSettingsSYNC = (interval, photoOrder) => {
+exports.saveSettingsSYNC = (interval, photoOrder, shutdownOption, shutdownTime) => {
     //construct a JSON object
     //Save the JSON object to a file
     const settings = {
         interval: interval,
-        photoOrder: photoOrder
+        photoOrder: photoOrder,
+        shutdownOption: shutdownOption,
+        shutdownTime: shutdownTime
     };
     const settingsJSON = JSON.stringify(settings);
     fs.writeFileSync(this.getSettingsLocation(), settingsJSON, 'utf8');

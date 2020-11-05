@@ -33,6 +33,18 @@ block content
                     select.custom-select#photoOrder(name="photoOrder")
                       option(value="random") Random
                       option(value="UploadOrder") In Order of Upload
+                div.row.justify-content-center.my-2
+                  .col-6.col-xl-3.text-center
+                    label.col-form-label(for="shutdownTime") Shutdown Time
+                  .col-6.col-xl-3 
+                    input#shutdownTime(type="time" class="form-control" placeholder="Select Time" name="shutdownTime")  
+                div.row.justify-content-center.my-2
+                  .col-6.col-xl-3.text-center
+                    label.col-form-label(for="shutdownOption") Automatic Shutdown
+                  .col-6.col-xl-3 
+                    select.custom-select#shutdownOption(name="shutdownOption")
+                      option(value="enabled") Enabled
+                      option(value="disabled") Disabled
                 div.row.mt-4.mb-2
                   input.btn.btn-secondary.mx-auto(type="submit" value="Save Settings")
               form(method="post" encType="application/x-www-form-urlencoded" action='/settings/reboot')
@@ -71,27 +83,75 @@ block content
       statusText.style.display = "block";
       statusText.style.color = "yellow";
       statusText.innerHTML = "Rebooting....."
-    } else {
+    } else if (status === "timeError"){
+        //the automatic shutdown was set but no time was set
+        statusText.style.display = "block";
+        statusText.style.color = "red";
+        statusText.innerHTML = "Automatic shutdown selected but no time was set, configuration reverted to previous settings";
+        //only show the message for 5 seconds
+        setTimeout(() => {
+          statusText.style.display = "none";
+        }, 5000);
+    }
+      else{
       statusText.style.display = "none";
     } 
 
     //display the current settings for the photoframe
-    const timeSelector = document.getElementById("interval");
-    //convert the collection into an array
-    const arrayInterval = Array.from(timeSelector.children);
-    arrayInterval.forEach((cur) => {
-        if (cur.value == !{currentInterval}){
-          cur.selected = true;
-        }
-      }
-    );
+    //- const timeSelector = document.getElementById("interval");
+    //- //convert the collection into an array
+    //- const arrayInterval = Array.from(timeSelector.children);
+    //- arrayInterval.forEach((cur) => {
+    //-     if (cur.value == !{currentInterval}){
+    //-       cur.selected = true;
+    //-     }
+    //-   }
+    //- );
 
-    const orderSelector = document.getElementById("photoOrder");
-    //convert the collection into an array
-    const arrayOrder = Array.from(orderSelector.children);
-    arrayOrder.forEach((cur) => {
-        if (cur.value == "!{currentOrder}"){
-          cur.selected = true;
+    
+
+    //display the correct settings for photoorder
+    //- const orderSelector = document.getElementById("photoOrder");
+    //- //convert the collection into an array
+    //- const arrayOrder = Array.from(orderSelector.children);
+    //- arrayOrder.forEach((cur) => {
+    //-     if (cur.value == "!{currentOrder}"){
+    //-       cur.selected = true;
+    //-     }
+    //-   }
+    //- );
+
+
+
+    //- 
+    //- const orderSelector = document.getElementById("shutdownOption");
+    //- //convert the collection into an array
+    //- const arrayOrder = Array.from(orderSelector.children);
+    //- arrayOrder.forEach((cur) => {
+    //-     if (cur.value == "!{currentShutdownOption}"){
+    //-       cur.selected = true;
+    //-     }
+    //-   }
+    //- );
+
+    const setOptions = (element, value) => {
+      //display the correct settings for shutdown enabled
+      const orderSelector = document.getElementById(element);
+      //convert the collection into an array
+      const arrayOrder = Array.from(orderSelector.children);
+      arrayOrder.forEach((cur) => {
+          if (cur.value === value){
+            cur.selected = true;
+          }
         }
-      }
-    );
+      );
+    }
+
+    //display the correct settings for shutdown enabled
+    setOptions("shutdownOption", "!{currentShutdownOption}");
+    setOptions("photoOrder", "!{currentOrder}");
+    setOptions("interval", "!{currentInterval}");
+
+    //display the correct time set in the settings
+    const shutdownTimeSelector = document.getElementById("shutdownTime");
+    shutdownTimeSelector.value = "!{currentShutdownTime}";

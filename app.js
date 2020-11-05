@@ -64,6 +64,43 @@ commonFunctions.setPhotoOrder();
 //generate the photolist
 commonFunctions.generateNewPhotoList();
 
+//Interval function checks at regular intervals if it is time to shutdown the 
+//photoframe or not
+
+const timeIntervalPeriod = 5000; //60 * 1000 * 2; //two minutes
+
+setInterval(() => {
+    console.log("Time to shutdown down?");
+    //read in the settings 
+    const settingsObj = commonFunctions.readCurrentSettingSYNC();
+    if (settingsObj.shutdownOption === "enabled"){
+        const settingsTime = settingsObj.shutdownTime;
+        //convert to a time 
+        const colonPosition = settingsTime.search(":");
+        const shutdownTimeHours = settingsTime.substring(0, colonPosition);
+        const shutdownTimeMinutes = settingsTime.substring(colonPosition + 1, settingsTime.length);
+
+        const numShutdownHours = shutdownTimeHours * 1;
+        const numShutdownMinutes = shutdownTimeMinutes * 1;
+
+        //current Date`
+        const now = new Date();
+
+        //create a date object from shutdown time and current day
+        const shutdownTime = new Date(now.getUTCFullYear(), now.getMonth(), now.getDate(), numShutdownHours, numShutdownMinutes, 0);
+
+        //valueOf returns time in milliseconds from 1970 epoch
+        if (shutdownTime.valueOf() < now.valueOf()){
+            console.log("Shutdown");
+            shell.echo("Automatic shutdown of Photoframe");
+            shell.exec("sudo shutdown now");
+        } else {
+            console.log("Dont Shutdown");
+        }
+    }
+
+}, timeIntervalPeriod);
+
 //routing
 
 //Mounting the routers

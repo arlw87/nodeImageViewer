@@ -28,6 +28,7 @@
     "express-fileupload": "^1.2.0",
     "image-size": "^0.9.3",
     "image-thumbnail": "^1.0.11",
+    "imap-simple": "^5.0.0",
     "morgan": "^1.10.0",
     "pug": "^3.0.0",
     "shelljs": "^0.8.4"

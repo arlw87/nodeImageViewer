@@ -4,6 +4,7 @@ const uploadRouter = require('./routes/uploadRoute');
 const homeRouter = require('./routes/homeRoute');
 const settingsRouter = require('./routes/settingsRoute');
 const liveRouter = require('./routes/liveRoute.js');
+const email = require('./email');
 
 const express = require('express');
 const app = express();
@@ -67,9 +68,10 @@ commonFunctions.generateNewPhotoList();
 //Interval function checks at regular intervals if it is time to shutdown the 
 //photoframe or not
 
-const timeIntervalPeriod = 60 * 1000 * 2; //two minutes
+const timeIntervalPeriodShutdown = 60 * 1000 * 2; //two minutes
 
 setInterval(() => {
+
     console.log("Time to shutdown down?");
     //read in the settings 
     const settingsObj = commonFunctions.readCurrentSettingSYNC();
@@ -99,7 +101,17 @@ setInterval(() => {
         }
     }
 
-}, timeIntervalPeriod);
+}, timeIntervalPeriodShutdown);
+
+//check email
+
+const timeIntervalPeriodEmail = 60 * 1000 * 0.5; //two minutes
+
+setInterval(function () {
+    //check email every 2 minutes
+    email.checkInbox();
+}, timeIntervalPeriodEmail);
+
 
 //routing
 

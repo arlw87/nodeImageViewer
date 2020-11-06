@@ -91,7 +91,8 @@ exports.deleteImageFromList = ( imageName ) => {
 
 //Insert new image into the photolist
 exports.insertNewImage = ( imageName ) => {
-    if (this.getPhotoOrder === "random"){
+    console.log(`photo Order is set to ${this.getPhotoOrder()}`);
+    if (this.getPhotoOrder() === "random"){
         //new image to display straight away
         //insert into index of array
         photoOrderList.splice(photoPointer, 0, imageName);
@@ -103,10 +104,25 @@ exports.insertNewImage = ( imageName ) => {
         photoOrderList = this.generatePhotoOrder();
         photoPointer = 0;
     }
-
-
-
+    console.log("Photo ORDER after insert image(s)");
+    console.log(photoOrderList);
 }
+
+// //for when multiple images are add via email
+// exports.insertNewImages = ( imagesArray ) => {
+//     if (this.getPhotoOrder === "random"){
+//         //new images to display straight away
+//         //insert into index of array
+//         imagesArray.forEach((element) => {
+//             photoOrderList.splice(photoPointer, 0, element);
+//         });
+        
+//     } else {
+//         //regenerate photolist and start from beginning
+//         photoOrderList = this.generatePhotoOrder();
+//         photoPointer = 0;
+//     }
+// }
 
 exports.generateNewPhotoList = () => {
     photoPointer = 0;
@@ -221,4 +237,42 @@ exports.generatePhotoOrder = () => {
         //photo order of upload
         return this.generatePhotoListUploadOrder();
     }
+}
+
+exports.newFileName = () => {
+    const imageFolder = this.getImageFolderPath();
+    const files = fs.readdirSync(imageFolder);
+    const numberOfFiles = files.length;
+    let number;
+    console.log(files);
+    if (numberOfFiles === 0){
+            //create first file name
+        number = 10000000;
+    } else {    
+        let highestNumber = 0;
+        let countIMGfiles = 0;
+        //get last file name this may not be a new file name format
+        for (let i = 0 ; i < files.length; i++){
+            console.log(`type of ${typeof files[i]}`);
+            if (files[i].substring(0, 6) == "IMAGE_"){ 
+                countIMGfiles ++;
+                let currentNumberStr = files[i].substring(6, 14);
+                let currentNumber = currentNumberStr * 1;
+                console.log(`currentNumberStr ${currentNumberStr}`);
+                console.log(`currentNumber ${currentNumber}`);
+                console.log(`highestNumber ${highestNumber}`);
+                if (currentNumber > highestNumber){
+                    highestNumber = currentNumber;
+                }
+            }
+        }
+        if (countIMGfiles === 0){
+            number = 10000000;
+        } else {
+            number = highestNumber + 1;
+        }
+    
+    }
+    console.log(`IMAGE_${number}.jpg`);
+    return `IMAGE_${number}.jpg`;
 }

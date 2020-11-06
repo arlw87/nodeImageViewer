@@ -5,8 +5,8 @@ var path = require('path');
 
 var config = {
     imap: {
-       user: '***',
-       password: '***',
+       user: '****',
+       password: '*****',
        host: 'imap.gmail.com',
        port: 993,
        tls: true,
@@ -68,17 +68,14 @@ exports.checkInbox = () => {imaps.connect(config).then(function (connection) {
 
             const newImages = [];
 
-
-
             attachments.forEach(function (element){
-
+                let filename = element.filename;
                 //check if the file is of type JPEG
-                let pos = element.filename.search("."); 
-                let fileType = element.filename.substring(pos, element.data.filename.length);
-                console.log(`file type ${fileType}`);
+                let pos = filename.indexOf("."); 
+                let fileType = filename.substring(pos + 1, filename.length);
                 fileType = fileType.toUpperCase();
                 if (fileType === "JPEG" || fileType === "JPG"){
-
+                //if attachment file is a jpg or jpeg then process and download
                     console.log("Right file type");
                     const imageFolder = commonFunctions.getImageFolderPath();
                     const imageThumbnailFolder = commonFunctions.getThumbnailImageFolderPath();
@@ -89,8 +86,6 @@ exports.checkInbox = () => {imaps.connect(config).then(function (connection) {
                     fs.writeFileSync(`${path.join(imageFolder,newFileName)}`, element.data);
                     //Create the new thumbnail
                     commonFunctions.writeThumbnail(newFileName, imageFolder, imageThumbnailFolder);
-                    //Generate new photo Order List
-                    //commonFunctions.insertNewImage(newFileName);
     
                     //if there are multiple images to be added to the photolist want to do it
                     //all at once otherwise on each insert the list is randomised so they dont
@@ -98,18 +93,20 @@ exports.checkInbox = () => {imaps.connect(config).then(function (connection) {
                     newImages.push(newFileName);
                     
                 } else {
+                    //if not the right file type more on to need attachment
                     console.log("Not the right file type");
                 }
 
             });
 
-            
+            //add attachment images to photolist
             if (newImages.length !== 0){ 
                 newImages.forEach((element) => {
                     commonFunctions.insertNewImage(element);
                 });
             }
 
+            //close connection to mailbox
             connection.closeBox((err) => {
                 if (err){
                     console.log("Cant close inbox");

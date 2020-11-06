@@ -89,8 +89,13 @@ exports.reboot = (req, res) => {
         currentShutdownOption: `${currentSettings.shutdownOption}`,
         currentShutdownTime: `${currentSettings.shutdwonTime}` 
     });
-    shell.exec("sudo reboot now");
-    shell.echo("Rebooting.....");    
+
+    //delay so webpage can load
+    setTimeout(() => {
+        shell.exec("sudo reboot now");
+        shell.echo("Rebooting....."); 
+    }, 2000);
+   
 }
 
 const renderSettingsPage = (req, res, settingsObj, statusMessage) => {

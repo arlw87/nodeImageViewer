@@ -16,8 +16,10 @@ exports.galleryFunc = async (req, res) => {
     //read in the images files and then render the page
     fs.readdir(imageThumbnailFolder, (err, files) => {
         console.log(files);
+        //order files to so show recent ones first
+        const sortedFiles = commonFunctions.orderFilesByUpload(files, commonFunctions.getThumbnailImageFolderPath());
         res.status(200).render('gallery', {
-            images: files
+            images: sortedFiles
         });
     });
 }

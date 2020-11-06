@@ -5,10 +5,17 @@ block content
     div.py-4
       h1.text-center.display-4#headLineText Image Gallery
       hr
-      div.gallery#gallery
+      //- div.gallery#gallery
+      //-   each image in images
+      //-     div.mb-3.pics.animation.all
+      //-       a(href=`\\gallery\\${image}`)
+      //-         img.img-fluid(src=`\\images-thumbnails\\${image}` alt="Card image cap")
+  .container-fluid
+    .col-10.mx-auto
+      .row
         each image in images
-          div.mb-3.pics.animation.all
+          .col-4.pb-4
             a(href=`\\gallery\\${image}`)
-              img.img-fluid(src=`\\images-thumbnails\\${image}` alt="Card image cap")
- 
+              img.img-fluid(src=`\\images-thumbnails\\${image}` alt="Card image cap" style="width:600px;height:400px;object-fit:cover")
+          
 

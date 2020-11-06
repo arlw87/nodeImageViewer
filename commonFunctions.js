@@ -157,6 +157,29 @@ exports.getTimeInterval = () => {
     return settingsFile.interval * 1000;
 }
 
+exports.orderFilesByUpload = (files, directory) => { 
+    const imageDir = directory;
+    
+    //create a new array with the file and file modified time
+    files = files.map(function(fileName) {
+        console.log(`imageDir ${path.join(imageDir, fileName)}`);
+        return {
+            name: fileName,
+            time: fs.statSync(path.join(imageDir, fileName)).birthtimeMs,
+        };
+    });
+
+    //sort these files
+    files = files.sort(function(a, b) {
+        return b.time - a.time;
+    })
+
+    files = files.map(function(file) {
+        return file.name;
+    })
+    return files;
+}
+
 exports.generatePhotoListUploadOrder = () => {
     const imageDir = this.getImageFolderPath();
     let files = fs.readdirSync(imageDir);
@@ -181,7 +204,6 @@ exports.generatePhotoListUploadOrder = () => {
 
     console.log("Files in ordered of being uploaded");
     console.log(files);
-
     return files;
 }
 

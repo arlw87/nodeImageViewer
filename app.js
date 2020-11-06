@@ -67,7 +67,7 @@ commonFunctions.generateNewPhotoList();
 //Interval function checks at regular intervals if it is time to shutdown the 
 //photoframe or not
 
-const timeIntervalPeriod = 5000; //60 * 1000 * 2; //two minutes
+const timeIntervalPeriod = 60 * 1000 * 2; //two minutes
 
 setInterval(() => {
     console.log("Time to shutdown down?");

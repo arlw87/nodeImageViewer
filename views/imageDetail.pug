@@ -4,30 +4,17 @@ block content
     div.pt-3
         h1.text-center.display-4#headLineText Image Detail
         .container
-        .row.justify-content-center
-            hr.col-10.col-sm-11.col-lg-12
+            .row.justify-content-center
+                hr.col-10.col-sm-11.col-lg-12
         .container.pt-2
             .row.justify-content-center
-                .col.col-11.col-md-8
-                    img.img-fluid(src=`\\images\\${imageName}` alt="Card image cap")
-            .row.justify-content-center.pt-3
-                col-md-4
-                    span=`Name: ${data.name}`
-                .col-md-4
-                    span=`Camera: ${data.make} ${data.model}`
-                .col-md-4
-                    span=`Date: ${data.date}`
-            .row.justify-content-center.pt-3
-                .col-md-4
-                    span=`Exposure Time: ${data.exposureTime}`
-                .col-md-4
-                    span=`ISO: ${data.ISO}`
-                .col-md-4
-                    span=`F-Number: ${data.fNumber}`
+                img.img-fluid.mx-auto(src=`\\images\\${imageName}` alt="Card image cap" style="max-height:700px")
+            form(method="post" encType="multipart/form-data" action=`/gallery/delete/${imageName}`)
+                div.row.m-2
+                    input.btn.btn-danger.mx-auto(type="submit" value="Delete")
+           
         
-        form(method="post" encType="multipart/form-data" action=`/gallery/delete/${imageName}`)
-            div.row.m-2
-              input.btn.btn-danger.mx-auto(type="submit" value="Delete")
+
 
 
                 //- span name

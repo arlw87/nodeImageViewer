@@ -105,7 +105,7 @@ setInterval(() => {
 
 //check email
 
-const timeIntervalPeriodEmail = 60 * 1000 * 0.5; //two minutes
+const timeIntervalPeriodEmail = 60 * 1000 * 5; //five minutes
 
 setInterval(function () {
     //check email every 2 minutes

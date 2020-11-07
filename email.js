@@ -5,7 +5,7 @@ var path = require('path');
 
 var config = {
     imap: {
-       user: '****',
+       user: '*****',
        password: '*****',
        host: 'imap.gmail.com',
        port: 993,
@@ -15,8 +15,11 @@ var config = {
     }
 }
 
-exports.checkInbox = () => {imaps.connect(config).then(function (connection) {
- 
+//made async to avoid straining the resources meaning that node server may not 
+//respond to the live request on the actual frame
+exports.checkInbox = async () => {
+    
+    imaps.connect(config).then(function (connection) {
     connection.openBox('INBOX').then(function () {
  
         // Fetch emails from the last 24h

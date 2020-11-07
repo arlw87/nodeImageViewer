@@ -34,43 +34,41 @@ html(lang='en')
             var timeInterval = !{timeInterval};
             //div.text-center.align-middle.h-100.d-inline-block
             const f1 = () => {
-
-                const url = '/live/update';
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok!');
+                console.log(Date.now().toString());
+                const Http = new XMLHttpRequest();
+                //this callback fires anytime there is a readyState change
+                //which is not just when the fetch is complete
+                //https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+                Http.onreadystatechange = function() {
+                    if (Http.readyState == 4){
+                        //if response back is successful then
+                        //process the response
+                        if (Http.status == 200){
+                            var ResponseArray = JSON.parse(this.responseText);
+                            timeInterval = ResponseArray.data.timeInterval;
+                            updateImage(ResponseArray);
                         }
-                        console.log("Response is ok");
-                        return response;
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                        var ResponseArray = data;
-                        timeInterval = ResponseArray.data.timeInterval;
-                        updateImage(ResponseArray);
-                        console.log(`time interval is ${timeInterval}`);
+
+                        //if readyState is 4 then the fetch is complete
+                        //and the data transfer is either successful or not 
+                        //in either case you want to start the next timer
+                        console.log(timeInterval);
                         setTimeout(f1, timeInterval); 
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        console.log("error contacting the server");
-                        console.log("Try again....");
-                        //try the fetch again if the server is unresponsive or busy
-                        //maybe only try once every second
-                        //just not to overwhelm the server
-                        setTimeout(f1, 1000);
-                    });
+                    }
+                }
+                const url = '/live/update';
+                Http.open("GET", url);
+                Http.send();
             }
 
             const updateImage = (responseArray) => {
                 const image = responseArray.data.imagePath;
-                console.log(`(updateImage) image is ${image}`);
                 setBackgroundImage(image);
             }
 
             setTimeout(f1, timeInterval);
+
+
 
         style(type='text/css').
             body, html{

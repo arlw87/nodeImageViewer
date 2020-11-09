@@ -26,11 +26,16 @@
     "exif-parser": "^0.1.12",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.0",
+    "get-exif": "^1.0.3",
     "image-size": "^0.9.3",
     "image-thumbnail": "^1.0.11",
     "imap-simple": "^5.0.0",
+    "masonry-layout": "^4.2.2",
+    "modify-exif": "0.0.1",
     "morgan": "^1.10.0",
+    "piexifjs": "^1.0.6",
     "pug": "^3.0.0",
+    "read-exif": "^1.0.0",
     "shelljs": "^0.8.4"
   }
 }

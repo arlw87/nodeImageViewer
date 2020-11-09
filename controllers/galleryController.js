@@ -16,6 +16,7 @@ exports.galleryFunc = async (req, res) => {
     //read in the images files and then render the page
     fs.readdir(imageThumbnailFolder, (err, files) => {
         console.log(files);
+
         //order files to so show recent ones first
         const sortedFiles = commonFunctions.orderFilesByUpload(files, commonFunctions.getThumbnailImageFolderPath());
         res.status(200).render('gallery', {
@@ -38,15 +39,11 @@ exports.imageDetailFunc = (req, res) => {
         console.log(results);
         console.log(results.tags.Make);
         var exifData = {
-            make: results.tags.Make,
-            model: results.tags.Model,
             imageSize: results.tags.imageSize,
-            date: results.tags.ModifyDate, 
-            exposureTime: results.tags.ExposureTime,
-            iso: results.tags.ISO,
-            fNumber: results.tags.FNumber,
-            name:imageDetail
+            Orientation: results.tags.Orientation
         }
+
+        console.log(exifData);
 
         res.status(200).render('imageDetail', { 
             imageName: imageName,
@@ -81,4 +78,15 @@ exports.deleteImage = (req, res) => {
     commonFunctions.deleteImageFromList(imageToDelete);
 
     res.status(200).render('delete');
+};
+
+exports.showImageOnFrame = (req, res) => {
+    const imageToShow = req.params.imageToShow;
+
+    //show the image next in the slideshow
+    commonFunctions.showImageNextOnFrame(imageToShow);
+
+    res.status(200).render('imageDetail', { 
+        imageName: imageToShow
+    });
 };

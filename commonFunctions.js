@@ -1,6 +1,8 @@
 const imageThumbnail = require('image-thumbnail');
 const fs = require('fs');
 const path = require('path');
+const modifyExif = require('modify-exif');
+var parser = require('exif-parser');
 let photoPointer;
 var photoOrderList;
 var locationOfImages = "images";
@@ -23,21 +25,79 @@ let options = { percentage: 75};
 
 //create thumbnails from the main images
 exports.writeThumbnail = async (image, imageFolderPath, imageThumbnailFolderPath) => {
+
     try{
+        let orientation;
+
+        orientation = await this.readOrientationData(path.join(imageFolderPath, image));
+
+        console.log(`The orientation is ${orientation}`);
+
+        //create thumbnail output is a buffer
         const thumbnail = await imageThumbnail(path.join(imageFolderPath, image), options);
-        console.log(image);
-        await fs.writeFileSync(path.join(imageThumbnailFolderPath, `thnl-${image}`), thumbnail);
+
+        let thumbNailWithOrient;
+        //if the original image has an orientation write that to the thumbnail image
+        if (orientation !== 'undefined'){
+            thumbNailWithOrient = await this.modifyExifOrientaion(thumbnail, orientation);
+        } else {
+            thumbNailWithOrient = thumbnail;
+        }
+            
+        //thumbNailWithOrient = thumbnail;
+
+        //write the buffered thumbnail data to a file
+        await fs.writeFileSync(path.join(imageThumbnailFolderPath, `thnl-${image}`), thumbNailWithOrient); 
+        
+        console.log("Thumbnail Data");
+        this.readOrientationData(path.join(imageThumbnailFolderPath, `thnl-${image}`));
+        
     } catch (err){
         console.log("Error when writing a thumbnail");
         console.log(err);
     }
+}
 
+exports.readOrientationData = (fileLocation) =>{
+    return new Promise((resolve, reject) => {
+        fs.readFile(fileLocation, function (err, data) {
+            var p1 = parser.create(data);
+            var results = p1.parse();
+            console.log(results.tags.Orientation);
+            let orientation = results.tags.Orientation;
+
+            //quick test orientation
+            console.log("THESE ARE THE EXIF RESULTS");
+            console.log(results);
+
+
+            if (err) {
+                console.log(err);
+                reject(err);
+            }
+            else {
+                resolve(orientation);
+            }
+        });
+    });
+}
+
+
+
+
+//modify the orientation of the image
+exports.modifyExifOrientaion = async(buffer, orientation) => {
+    let newBuffer = modifyExif(buffer, data => {
+        console.log("From Modify");
+        console.log(data);
+        data["0th"]["274"] = orientation;
+     });
+    return newBuffer;     
 }
 
 exports.getSettingsLocation = () => {
     return path.join(__dirname, 'settings', 'settings.json');
 };
-
 
 exports.generateRandomPhotoOrder = () => {
     //get list of files in an array
@@ -88,6 +148,11 @@ exports.deleteImageFromList = ( imageName ) => {
         photoOrderList.splice(pos, 1);
     }
 }
+
+exports.showImageNextOnFrame = (imageName) => {
+    photoOrderList.splice(photoPointer, 0, imageName);
+}
+
 
 //Insert new image into the photolist
 exports.insertNewImage = ( imageName ) => {

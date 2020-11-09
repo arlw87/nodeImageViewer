@@ -16,5 +16,6 @@ block content
         each image in images
           .col-lg-4.pb-4.text-center
             a(href=`\\gallery\\${image}`)
-              img.img-fluid(src=`\\images-thumbnails\\${image}` alt=`${image}` style="width:600px;height:400px;object-fit:cover")        
-
+              img(src=`\\images-thumbnails\\${image}` alt=`${image}` style="object-fit:cover;width:auto;height:auto;max-height:600px;max-width:600px")
+              //image-orientation:from-image" ;   width:600px;height:400px;     
+              //img.img-fluid(src=`\\images-thumbnails\\${image}` alt=`${image}` style="object-fit:cover;width:auto;height:auto;")

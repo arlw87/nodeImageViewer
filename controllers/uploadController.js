@@ -32,8 +32,8 @@ exports.uploadImage = (req, res) => {
         commonFunctions.writeThumbnail(newFileName, imageFolder, imageThumbnailFolder);
         //needs to run after the image has saved to generate new list
         commonFunctions.insertNewImage(newFileName);
-    });   
-
+    });  
+    
     uploadResponse(res, 200, "Upload was Successful", "Upload another?");
 };
 

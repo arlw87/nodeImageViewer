@@ -9,6 +9,9 @@ block content
         .container.pt-2
             .row.justify-content-center
                 img.img-fluid.mx-auto(src=`\\images\\${imageName}` alt="Card image cap" style="max-height:700px")
+            form(method="post" encType="multipart/form-data" action=`/gallery/showNext/${imageName}`)
+                div.row.m-2
+                    input.btn.btn-success.mx-auto(type="submit" value="Show next on frame")
             form(method="post" encType="multipart/form-data" action=`/gallery/delete/${imageName}`)
                 div.row.m-2
                     input.btn.btn-danger.mx-auto(type="submit" value="Delete")

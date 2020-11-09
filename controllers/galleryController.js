@@ -32,25 +32,10 @@ exports.imageDetailFunc = (req, res) => {
 
     console.log(path.join(imageFolder, imageName));
     //test out the image detail parser
-    fs.readFile(path.join(imageFolder, imageName), (err, file) => {
-        console.log(file);
-        var p1 = parser.create(file);
-        var results = p1.parse();
-        console.log(results);
-        console.log(results.tags.Make);
-        var exifData = {
-            imageSize: results.tags.imageSize,
-            Orientation: results.tags.Orientation
-        }
-
-        console.log(exifData);
-
-        res.status(200).render('imageDetail', { 
-            imageName: imageName,
-            data: exifData
+    res.status(200).render('imageDetail', { 
+            imageName: imageName
         });
 
-    });
 }
 
 exports.deleteImage = (req, res) => {
@@ -82,11 +67,14 @@ exports.deleteImage = (req, res) => {
 
 exports.showImageOnFrame = (req, res) => {
     const imageToShow = req.params.imageToShow;
-
+    console.log("test");
     //show the image next in the slideshow
     commonFunctions.showImageNextOnFrame(imageToShow);
 
+    let pageName = `${imageToShow}`;
+    console.log(pageName);
+    //res.end();
     res.status(200).render('imageDetail', { 
-        imageName: imageToShow
+        imageName: pageName
     });
 };
